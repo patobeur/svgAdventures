@@ -1,5 +1,9 @@
 class SvgManager {
 	constructor() {
+		this.margetemporaireLeft = 50
+		this.margetemporaireTop = 50
+		this.margetemporaireRigth = 50
+		this.margetemporaireBottom = 50
 		this.currentMap = 0
 		this.map = Maps.getMapDatas(this.currentMap)
 		this.SvgMap = null;
@@ -8,23 +12,31 @@ class SvgManager {
 	createMap() {
 		Con.addMessage('Creating Map...')
 		this.SvgMap = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		this.SvgMap.setAttribute("viewBox", `-50 -50 ${this.map.datas.width + 100} ${this.map.datas.height + 100}`);
-		this.SvgMap.setAttribute("width", this.map.datas.width + 100 + 'px');
-		this.SvgMap.setAttribute("height", this.map.datas.height + 100 + 'px');
+		this.SvgMap.setAttribute("viewBox", `-${this.margetemporaireLeft}  -${this.margetemporaireTop} ${this.map.datas.width + (this.margetemporaireTop + this.margetemporaireLeft)} ${this.map.datas.height + (this.margetemporaireTop + this.margetemporaireLeft)}`);
+		this.SvgMap.setAttribute("width", this.map.datas.width + (this.margetemporaireLeft + this.margetemporaireRigth) + 'px');
+		this.SvgMap.setAttribute("height", this.map.datas.height + (this.margetemporaireTop + this.margetemporaireBottom) + 'px');
 		this.SvgMap.setAttribute("class", 'map');
 		this.SvgMap.setAttribute("xml:space", 'preserve');
 		this.SvgMap.setAttribute("enable-background:new", `0 0 ${this.map.datas.width} ${this.map.datas.height}`);
 
 		this.refreshSvgMap()
-		let cadre = this.getRect(-50, -50, this.map.datas.width, this.map.datas.width, 'rgba(0,0,0,.5)')
+		let cadre = this.getRect(-this.margetemporaireLeft, -this.margetemporaireTop, this.map.datas.width, this.map.datas.width, 'rgba(0,0,255,.1)')
 		this.SvgMap.appendChild(cadre)
 		this.addSvgMapToDom()
+
+		this.addRules()
 	}
-	update() {
-		if (Players.player) {
-			Players.checkSkill();
-			if (Players.ismoving()) this.refreshSvgMap();
+	addRules() {
+		for (let index = 0; index <= 10; index++) {
+			let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+			line.setAttribute("style", 'fill:#FFFFFF;stroke:#1D1D1B;stroke-miterlimit:10;');
+			line.setAttribute("x1", index * 50);
+			line.setAttribute("y1", '-5');
+			line.setAttribute("x2", index * 50);
+			line.setAttribute("y2", '0');
+			this.SvgMap.appendChild(line)
 		}
+
 	}
 	addSvgMapToDom() {
 		document.body.appendChild(this.SvgMap);

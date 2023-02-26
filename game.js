@@ -13,7 +13,7 @@ class GAME {
 		}, this.timeout);
 	}
 	update() {
-		Svg.update()
+		if (Players.player) Players.update();
 	}
 }
 const Con = new Console();

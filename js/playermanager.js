@@ -2,23 +2,24 @@ class PlayerManager {
 	constructor() {
 		this.formulas = new Formula()
 		this.Shapes = this.getShapes()
+		this.defaultX = 50
+		this.defaultY = 50
 		this.defaultShapeNum = 0
-		this.diagonalspeedratio = 1.8
-		// this.svgmoover = new SvgMoover();
+		this.diagonalspeedratio = 2
 	}
 	setNewPlayer(pseudo) {
 		this.currentShapeNum = this.defaultShapeNum
 		if (typeof pseudo != 'string' || pseudo === "") { pseudo = "Doe" }
-
 		this.player = this.getPlate(this.Shapes[this.currentShapeNum], pseudo)
 		Con.addMessage('new player : ' + pseudo + ' (' + this.currentShapeNum + ')')
-
 		Svg.addplayerElement()
-
+	}
+	update() {
+		this.checkSkill();
+		if (this.ismoving()) Svg.refreshSvgMap();
 	}
 	getPlate(Archetype, pseudo) {
-		// console.log('getPlate Archetype', Archetype)
-		return {
+		let player = {
 			pseudo: pseudo,
 			map: Number(0),
 			xp: 0,
@@ -27,8 +28,8 @@ class PlayerManager {
 			datas: {
 				width: Archetype.datas.width,
 				height: Archetype.datas.height,
-				top: 50 - Math.floor(Archetype.datas.height / 2),
-				left: 50 - Math.floor(Archetype.datas.width / 2),
+				top: this.defaultX - Math.floor(Archetype.datas.height / 2),
+				left: this.defaultY - Math.floor(Archetype.datas.width / 2),
 				zIndex: 1
 			},
 			skills: {
@@ -38,22 +39,16 @@ class PlayerManager {
 				update: true
 			},
 			keyboard: new KeyboardControls(),
-			update: () => {
-				this.update()
-
-			}
+			update: () => this.update()
 		}
-	}
-	update() {
-		console.log('player update')
-		this.shootSkill()
+		player.grid = Maps.getCurrentGridPos(player.datas)
+		return player
 	}
 	sendSkill(skillnum) {
 		switch (skillnum) {
 			case 0:
 				this.shapechanger();
 				break;
-
 			default:
 				break;
 		}
@@ -77,7 +72,6 @@ class PlayerManager {
 				if (keyboard.skills[skillnum] === true) {
 					if (skill.current === -1) {
 						skill.current = 1
-						// this.player.svgmoover.moveHeads();
 						this.sendSkill(skillnum);
 					}
 					else Con.addMessage('waiting for ' + skill.skillname + '...' + (skill.recast - skill.current)) // console.log('wait...' + (skill.recast - skill.current))
@@ -87,7 +81,6 @@ class PlayerManager {
 		}
 	}
 	ismoving() {
-
 		let top = 'y'
 		let left = 'x'
 		if (this.player.shape.tag === 'circle') { top = 'cy'; left = 'cx' }
@@ -109,6 +102,7 @@ class PlayerManager {
 	movePlayer() {
 		// way= [top,right,bottom,left]		
 		if (this.player.options.update) {
+			this.player.grid = Maps.getCurrentGridPos(this.player.datas)
 			let way = this.player.keyboard.way
 			let speed = this.player.shape.speed
 			if ((way[0] || way[2]) && (way[1] || way[3])) speed = Math.floor(speed / this.diagonalspeedratio)
@@ -148,7 +142,7 @@ class PlayerManager {
 					rayon: this.formulas.calculerRayon(10, 10), // rayon
 					tag: 'circle',
 					color: 'red',
-					speed: 3,
+					speed: 2,
 				}
 			},
 			{
@@ -157,7 +151,7 @@ class PlayerManager {
 					model: 'bob',
 					tag: 'rect',
 					color: 'green',
-					speed: 3,
+					speed: 2,
 				}
 			},
 			// {

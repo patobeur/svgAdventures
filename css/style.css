@@ -7,13 +7,12 @@
 body {
 	overflow: hidden;
 	background-color: rgb(57, 59, 75);
-	background-color: azure;
 }
 
 .map {
 	border: 3px dotted black;
 	position: absolute;
-	background-color: azure;
+	background-color: white;
 	z-index: 1;
 }
 
