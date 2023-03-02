@@ -26,12 +26,12 @@ class PlayerManager {
 			datas: {
 				width: Archetype.datas.width,
 				height: Archetype.datas.height,
-				top: (Svg.map.datas.height/2) - Math.floor(Archetype.datas.height / 2),
-				left: (Svg.map.datas.width/2) - Math.floor(Archetype.datas.width / 2),
+				top: (Svg.map.datas.height / 2),// - Math.floor(Archetype.datas.height / 2),
+				left: (Svg.map.datas.width / 2),// - Math.floor(Archetype.datas.width / 2),
 				zIndex: 1
 			},
 			skills: {
-				shapechanger: { recast: 500, current: -1, skillname: 'Shape Changing' },
+				shapechanger: { recast: 10, current: -1, skillname: 'Shape Changing' },
 			},
 			options: {
 				update: true
@@ -39,6 +39,8 @@ class PlayerManager {
 			keyboard: new KeyboardControls(),
 			update: () => this.update()
 		}
+		// player.datas.left = (this.map.datas.width / 2);// - (Players.player.datas.width / 2)
+		// player.datas.top = (this.map.datas.height / 2);// - (Players.player.datas.height / 2)
 		player.grid = Maps.getCurrentGridPos(player.datas)
 		return player
 	}

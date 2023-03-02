@@ -31,15 +31,28 @@ class SvgManager {
 	}
 	addRules() {
 		for (let index = 0; index <= 10; index++) {
-			let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-			line.setAttribute("style", 'fill:#FFFFFF;stroke:#1D1D1B;stroke-miterlimit:10;');
-			line.setAttribute("x1", index * 50);
-			line.setAttribute("y1", '-5');
-			line.setAttribute("x2", index * 50);
-			line.setAttribute("y2", '0');
-			this.SvgMap.appendChild(line)
+			// getLine(x1, y1, x2, y2, color, width = 1)
+			let elementdatas = {
+				tag: 'line',
+				style: 'fill:#FFFFFF;stroke:#1D1D1B;stroke-miterlimit:10;',
+				x1: index * 50,
+				y1: -5,
+				x2: index * 50,
+				y2: 0,
+			}
+			let element = this.getSvgElement(elementdatas)
+			this.SvgMap.appendChild(element)
 		}
 
+	}
+	getSvgElement(elementdatas) {
+		let element = document.createElementNS("http://www.w3.org/2000/svg", elementdatas.tag);
+		for (const attrib in elementdatas) {
+			if (Object.hasOwnProperty.call(elementdatas, attrib)) {
+				element.setAttribute(attrib, elementdatas[attrib]);
+			}
+		}
+		return element
 	}
 	addSvgMapToDom() {
 		document.body.appendChild(this.SvgMap);
@@ -63,42 +76,43 @@ class SvgManager {
 		this.SvgMap.style.left = Math.floor(((window.innerWidth / 2) - left)) + 'px'
 	}
 	addplayerElement() {
-		Players.player.datas.left = this.map.datas.width/2
-		Players.player.datas.top = this.map.datas.height/2
+		console.log(Players.player.shape)
+		let elementdatas = {}
 		switch (Players.player.shape.tag) {
 			case 'circle':
-				this.SvgPlayer = this.getCircle(
-					Players.player.datas.left,
-					Players.player.datas.top,
-					Players.player.shape.rayon,
-					Players.player.shape.color,
-					'player'
-				)
+				elementdatas = {
+					tag: Players.player.shape.tag,
+					cx: Players.player.datas.left,
+					cy: Players.player.datas.top,
+					r: Number(Players.player.shape.rayon),
+					fill: Players.player.shape.color,
+				}
 				break;
 			case 'rect':
-				this.SvgPlayer = this.getRect(
-					Players.player.datas.left,
-					Players.player.datas.top,
-					Players.player.datas.width,
-					Players.player.datas.height,
-					Players.player.shape.color,
-					'player'
-				)
+				elementdatas = {
+					tag: Players.player.shape.tag,
+					x: Players.player.datas.left,
+					y: Players.player.datas.top,
+					width: Players.player.datas.width,
+					height: Players.player.datas.height,
+					fill: Players.player.shape.color,
+				}
 				break;
-			case 'polygon':
-				this.SvgPlayer = this.getPolygon(
-					Players.player.datas.left,
-					Players.player.datas.top,
-					Players.player.datas.width,
-					Players.player.datas.height,
-					3,
-					Players.player.shape.color,
-					'player'
-				)
-				break;
+			// case 'polygon':
+			// 	this.SvgPlayer = this.getPolygon(
+			// 		Players.player.datas.left,
+			// 		Players.player.datas.top,
+			// 		Players.player.datas.width,
+			// 		Players.player.datas.height,
+			// 		3,
+			// 		Players.player.shape.color,
+			// 		'player'
+			// 	)
+			// 	break;
 			default:
 				break;
 		}
+		this.SvgPlayer = this.getSvgElement(elementdatas)
 		this.SvgMap.prepend(this.SvgPlayer);
 		this.refreshSvgMap()
 	}
