@@ -2,8 +2,6 @@ class PlayerManager {
 	constructor() {
 		this.formulas = new Formula()
 		this.Shapes = this.getShapes()
-		this.defaultX = 50
-		this.defaultY = 50
 		this.defaultShapeNum = 0
 		this.diagonalspeedratio = 2
 	}
@@ -28,8 +26,8 @@ class PlayerManager {
 			datas: {
 				width: Archetype.datas.width,
 				height: Archetype.datas.height,
-				top: this.defaultX - Math.floor(Archetype.datas.height / 2),
-				left: this.defaultY - Math.floor(Archetype.datas.width / 2),
+				top: (Svg.map.datas.height/2) - Math.floor(Archetype.datas.height / 2),
+				left: (Svg.map.datas.width/2) - Math.floor(Archetype.datas.width / 2),
 				zIndex: 1
 			},
 			skills: {
@@ -124,7 +122,7 @@ class PlayerManager {
 		Svg.SvgPlayer.remove()
 		Svg.addplayerElement()
 		// replace player Archetype
-		Svgmoover.moveHeads()
+		Picto.moveHeads()
 	}
 	setNextShapeNum() {
 		this.currentShapeNum++;

@@ -5,9 +5,12 @@ class GAME {
 	start() {
 		Con.init()
 		Svg.createMap()
-		Svg.addRessources(122)
-		Players.setNewPlayer('Foon')
-		Svgmoover.init()
+		Players.setNewPlayer('Pat')
+		Picto.init()
+		Rabbit.init()
+		Svg.addCadre()
+		// Svg.addRessources(122)
+
 		setInterval(() => {
 			this.update()
 		}, this.timeout);
@@ -18,10 +21,11 @@ class GAME {
 }
 const Con = new Console();
 const Maps = new MapsManager()
+const Rabbit = new RabbitManager()
 const Doom = new DOMGenerator();
 const Players = new PlayerManager();
 const Svg = new SvgManager()
-const Svgmoover = new SvgMoover()
+const Picto = new PictoMoover()
 const Game = new GAME();
 window.onload = () => {
 	Game.start()

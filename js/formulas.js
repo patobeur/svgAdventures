@@ -19,4 +19,7 @@ class Formula {
 			y: y + Math.cos(theta) * speed
 		}
 	}
+	get_aleaEntreBornes(minimum, maximum) {
+		return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum
+	}
 }

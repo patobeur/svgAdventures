@@ -1,4 +1,4 @@
-class SvgMoover {
+class PictoMoover {
 	constructor(pos) {
 		this.currentKarma = pos;
 		this.headColors = ["#FF0000", "#00FF00", "#0000FF"]

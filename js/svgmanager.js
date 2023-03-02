@@ -20,11 +20,14 @@ class SvgManager {
 		this.SvgMap.setAttribute("enable-background:new", `0 0 ${this.map.datas.width} ${this.map.datas.height}`);
 
 		this.refreshSvgMap()
-		let cadre = this.getRect(-this.margetemporaireLeft, -this.margetemporaireTop, this.map.datas.width, this.map.datas.width, 'rgba(0,0,255,.1)')
-		this.SvgMap.appendChild(cadre)
 		this.addSvgMapToDom()
 
 		this.addRules()
+	}
+	addCadre() {
+		let cadre = this.getRect(-this.margetemporaireLeft, -this.margetemporaireTop, this.map.datas.width, this.map.datas.width, 'rgba(0,0,255,.1)')
+		this.SvgMap.prepend(cadre)
+
 	}
 	addRules() {
 		for (let index = 0; index <= 10; index++) {
@@ -60,6 +63,8 @@ class SvgManager {
 		this.SvgMap.style.left = Math.floor(((window.innerWidth / 2) - left)) + 'px'
 	}
 	addplayerElement() {
+		Players.player.datas.left = this.map.datas.width/2
+		Players.player.datas.top = this.map.datas.height/2
 		switch (Players.player.shape.tag) {
 			case 'circle':
 				this.SvgPlayer = this.getCircle(
