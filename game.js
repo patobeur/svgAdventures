@@ -9,6 +9,8 @@ class GAME {
 		Picto.init()
 		Rabbit.init()
 		Svg.addCadre()
+
+		Svg.addRules()
 		// Svg.addRessources(122)
 
 		setInterval(() => {

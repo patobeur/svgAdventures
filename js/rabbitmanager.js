@@ -10,25 +10,34 @@ class RabbitManager {
 	}
 	add(itemName,nb = 1) {
 		if (!nb) { nb = Math.floor(Math.random() * 50) + 1; }
-		// Boucle pour créer les carrés
+		let maxX = (Svg.map.datas.width - this.datas[itemName].width + 1)
+		let maxY = (Svg.map.datas.height - this.datas[itemName].height + 1)
 		for (let i = 0; i < nb; i++) {
-			// Position aléatoire du carré sur la carte
-			
-			let x = Math.floor(Math.random() * ((Svg.map.datas.width - this.datas[itemName].w - 0 + 1)) + 0)
-			let y = Math.floor(Math.random() * ((Svg.map.datas.height - this.datas[itemName].h - 0 + 1)) + 0)
-			let item;
+			// Position aléatoire sur la carte
+			let x = Math.floor(Math.random() * maxX)
+			let y = Math.floor(Math.random() * maxY)
+
+			let elementdatas = {
+				tag: this.datas[itemName].shape,
+				width: Number(this.datas[itemName].width),
+				height: Number(this.datas[itemName].height),
+				fill: this.datas[itemName].color,
+				class:this.datas[itemName].className
+			};
 			switch (this.datas[itemName].shape) {
-				case 'circle':		
-					item = Svg.getCircle(x, y, this.datas[itemName].r, this.datas[itemName].color, true)
+				case 'circle':
+					elementdatas.cx=x;
+					elementdatas.cy=y;
+					elementdatas.r= Number(this.datas[itemName].r);
 					break;
 				case 'rect':
-					item = Svg.getRect(x, y, this.datas[itemName].w, this.datas[itemName].h, this.datas[itemName].color, true)
+					elementdatas.x=x;
+					elementdatas.y=y;
 					break;		
 				default:
 					break;
 			}
-			item.setAttribute("class", this.datas[itemName].className);
-			// Ajouter le carré au SVG
+			let item = Svg.getSvgElement(elementdatas,itemName)
 			Svg.SvgMap.prepend(item);
 		}
 
@@ -36,12 +45,12 @@ class RabbitManager {
 	getDatas(){
 		return {
 			tree:{
-				w:10,h:10,color:'green',
+				width:10,height:10,color:'green',
 				className:'green-circle',
 				shape:'circle',r:5
 			},
 			rabbit:{
-				w:5,h:5,color:'white',
+				width:5,height:5,color:'white',
 				className:'white-circle',
 				shape:'rect'
 			}

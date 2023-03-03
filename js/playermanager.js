@@ -26,8 +26,8 @@ class PlayerManager {
 			datas: {
 				width: Archetype.datas.width,
 				height: Archetype.datas.height,
-				top: (Svg.map.datas.height / 2),// - Math.floor(Archetype.datas.height / 2),
-				left: (Svg.map.datas.width / 2),// - Math.floor(Archetype.datas.width / 2),
+				top: 0,//(Svg.map.datas.height / 2),// - Math.floor(Archetype.datas.height / 2),
+				left: 0,//(Svg.map.datas.width / 2),// - Math.floor(Archetype.datas.width / 2),
 				zIndex: 1
 			},
 			skills: {
