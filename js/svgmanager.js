@@ -9,6 +9,16 @@ class SvgManager {
 		this.SvgMap = null;
 		this.SvgPlayer = null;
 	}
+	refreshSvgMap() {
+		let top = (this.map.datas.height / 2) + this.margetemporaireTop
+		let left = (this.map.datas.width / 2) + this.margetemporaireLeft
+		if (Players && Players.player) {
+			top = Players.player.datas.top + this.margetemporaireTop;
+			left = Players.player.datas.left + this.margetemporaireLeft
+		}
+		this.SvgMap.style.top = Math.floor(((window.innerHeight / 2) - top)) + 'px'
+		this.SvgMap.style.left = Math.floor(((window.innerWidth / 2) - left)) + 'px'
+	}
 	createMap() {
 		Con.addMessage('Creating Map...')
 		let elementdatas = {
@@ -17,15 +27,25 @@ class SvgManager {
 			class: 'map',
 			width: this.map.datas.width + (this.margetemporaireLeft + this.margetemporaireRigth) + 'px',
 			height: this.map.datas.height + (this.margetemporaireTop + this.margetemporaireBottom) + 'px',
-			// fill: 'rgba(0,0,255,1)',
+			'xml:space': 'preserve',
+			'enable-background:new': `0 0 ${this.map.datas.width} ${this.map.datas.height}`
 		};
-		this.SvgMap = Svg.getSvgElement(elementdatas)
-		this.SvgMap.setAttribute("xml:space", 'preserve');
-		this.SvgMap.setAttribute("enable-background:new", `0 0 ${this.map.datas.width} ${this.map.datas.height}`);
 
+		this.SvgMap = Svg.getSvgElement(elementdatas)
 		this.refreshSvgMap()
 		this.addSvgMapToDom()
 
+	}
+	updateJauges(statName) {
+		console.log(statName, Players.player.stats[statName])
+		console.log(Players.player.stats[statName].current / Players.player.stats[statName].max)
+		document.getElementById('bar_' + statName).setAttribute('width', (Players.player.stats[statName].current / Players.player.stats[statName].max) * 30)
+		if (1 === 2) {
+			document.getElementById('txt_' + statName).textContent = ((Players.player.stats[statName].current / Players.player.stats[statName].max) * 100) + '%'
+		}
+		else {
+			document.getElementById('txt_' + statName).textContent = Players.player.stats[statName].current + ''
+		}
 	}
 	addCadre() {
 		let elementdatas = {
@@ -71,18 +91,7 @@ class SvgManager {
 		document.body.appendChild(this.SvgMap);
 		window.onresize = () => { this.refreshSvgMap() }
 	}
-	refreshSvgMap() {
-		let top = (this.map.datas.height / 2)
-		let left = (this.map.datas.width / 2)
-		if (Players && Players.player) {
-			top = Players.player.datas.top
-			left = Players.player.datas.left
-		}
-		this.SvgMap.style.top = Math.floor(((window.innerHeight / 2) - top)) + 'px'
-		this.SvgMap.style.left = Math.floor(((window.innerWidth / 2) - left)) + 'px'
-	}
 	addplayerElement() {
-		console.log(Players.player.shape)
 		let elementdatas = {}
 		switch (Players.player.shape.tag) {
 			case 'circle':
@@ -92,6 +101,7 @@ class SvgManager {
 					cy: Players.player.datas.top,
 					r: Number(Players.player.shape.rayon),
 					fill: Players.player.shape.color,
+					title: 'palyer'
 				}
 				break;
 			case 'rect':

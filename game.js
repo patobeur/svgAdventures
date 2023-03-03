@@ -11,8 +11,6 @@ class GAME {
 		Svg.addCadre()
 
 		Svg.addRules()
-		// Svg.addRessources(122)
-
 		setInterval(() => {
 			this.update()
 		}, this.timeout);
